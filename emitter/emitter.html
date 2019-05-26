@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>event bus</title>
+</head>
+<body>
+    <script src='./Emitter.js'></script>
+    <script>
+        const EventBus = new Emitter();
+        const fn1 = (a,b,c) => {
+            console.log('test1', a, b, c);
+        }
+        const fn2 = (a,b,c) => {
+            console.log('test2', a, b, c);
+        }
+        const fn3 = (a,b,c) => {
+            console.log('test3', a, b, c);
+        }
+        EventBus.addListener('test', fn1)
+        EventBus.addListener('test', fn2)
+        EventBus.addListener('test', fn3)
+        EventBus.emit('test', 1,2,3)
+        EventBus.removeListener('test', fn1);
+        setTimeout(() => {
+            EventBus.emit('test', 3,4,5)
+        }, 1000)
+    </script>
+</body>
+</html>
