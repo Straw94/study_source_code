@@ -1,0 +1,15 @@
+{
+  "name": "vue_checkdatatype_tests",
+  "version": "1.0.0",
+  "description": "测谁",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tobescholar"
+  },
+  "author": "scholar",
+  "license": "ISC"
+}

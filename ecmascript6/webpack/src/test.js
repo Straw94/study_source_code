@@ -1,9 +1,13 @@
-
-const test_module = {
-    print: (str = 'nothing to print') => console.log(str),
+function test() {
+    return function() {
+        console.log(this);
+    }
 }
 
-const aaa = () => console.log('aaa')
 
-
-export default test_module
+function parent() {
+    this.a = 123;
+    test()();
+    console.log(this.a);
+}
+parent();
