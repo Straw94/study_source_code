@@ -7,11 +7,12 @@ module.exports = {
     mode: 'development',
     devtool: 'inline-source-map',
     entry: {
+        'polyfills': './src/polyfills.js',
         'some_test': './src/index.js'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].index.js'
+        filename: '[name].bundle.js'
     },
     devServer: {
         contentBase: './dist',
@@ -23,6 +24,9 @@ module.exports = {
             title: '模块热替换'
         }),
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.ProvidePlugin({
+          _: path.resolve(__dirname, './src/utils')
+        })
     ],
     module: {
         rules: [

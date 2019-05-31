@@ -1,6 +1,7 @@
-// import './let_const';
 // import './proxy'
-import './reflect'
+// import './reflect'
+import './iterator.js'
+// import './generator'
 
 function index_module_print() {
     // console.log('this is index_module print function');
@@ -9,5 +10,6 @@ function index_module_print() {
 
 index_module_print();
 
-// console.log(`module.hot : ${JSON.stringify(module)}`);
+
+// import { cube } from './test_delete.js';
 
