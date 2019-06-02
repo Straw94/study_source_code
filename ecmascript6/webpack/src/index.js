@@ -2,6 +2,8 @@
 // import './reflect'
 // import './iterator.js'
 import './generator'
+import './async'
+import './class'
 
 function index_module_print() {
     // console.log('this is index_module print function');
