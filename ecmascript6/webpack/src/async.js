@@ -40,7 +40,7 @@ async function test() {
       break;
     } catch(err) {}
   }
-  console.log(result); // 3
+  console.log(result); // success
 }
 
 test();
