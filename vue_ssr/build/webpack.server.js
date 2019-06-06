@@ -1,6 +1,5 @@
 const webpack = require('webpack')
 const merge = require('webpack-merge');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const common = require('./webpack.common.js');
 const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
@@ -14,22 +13,26 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, '../server_dist')
+    path: path.resolve(__dirname, '../server_dist'),
+    libraryTarget: "commonjs",
   },
   plugins: [
-     // new UglifyJSPlugin({
-     //   sourceMap: true
-     // }),
-     new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin({
        title: 'Production',
        filename: 'index.html',
        template: path.resolve(__dirname, '../src/index.html')
-     }),
-     new VueLoaderPlugin(),
-     new webpack.DefinePlugin({
-       'process.env.NODE_ENV': JSON.stringify('server')
-     })
+    }),
+    new VueLoaderPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('server')
+    })
   ],
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+        '@': path.resolve(__dirname, '../src'),
+    },
+  },
   module: {
     rules: [
         {
@@ -37,10 +40,6 @@ module.exports = {
             exclude: /node_modules/,
             use: {
               loader: 'babel-loader',
-              options: {
-                 presets: ['@babel/preset-env']
-                 // plugins: ['babel-plugin-transform-runtime']
-              }
             }
         },
         {

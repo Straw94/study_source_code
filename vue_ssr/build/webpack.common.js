@@ -13,8 +13,14 @@ module.exports = {
        filename: 'index.html',
        template: path.resolve(__dirname, '../src/index.html')
      }),
-     new VueLoaderPlugin()
+     new VueLoaderPlugin(),
    ],
+   resolve: {
+     extensions: ['.js', '.vue', '.json'],
+     alias: {
+         '@': path.resolve(__dirname, '../src'),
+     },
+   },
    module: {
        rules: [
            {

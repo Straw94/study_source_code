@@ -15,6 +15,6 @@ module.exports = merge(common, {
     path: path.resolve(__dirname, '../dist')
   },
   devServer: {
-    contentBase: path.resolve(__dirname, './dist')
+    contentBase: path.resolve(__dirname, '../dist')
   }
 });
