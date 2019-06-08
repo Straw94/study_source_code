@@ -1,12 +1,5 @@
 const log = console.log.bind(console);
 
-const test = require('./test.ts')
-test();
-
-import test_go_to from './test_go_to';
-
-test_go_to();
-
 interface SquareConfig {
     color?: string;
     width?: number;

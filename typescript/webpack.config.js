@@ -1,4 +1,5 @@
   const path = require('path');
+  const webpack = require('webpack')
   const HtmlWebpackPlugin = require('html-webpack-plugin');
   const CleanWebpackPlugin = require('clean-webpack-plugin');
 
@@ -24,6 +25,9 @@
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         title: 'typescript学习'
+      }),
+      new webpack.ProvidePlugin({
+        '_': path.resolve(__dirname, './src/utils.ts')
       })
     ],
     devtool: 'inline-source-map',
