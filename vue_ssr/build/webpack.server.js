@@ -1,12 +1,12 @@
-const webpack = require('webpack')
+const path = require('path');
+const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 
-module.exports = {
+module.exports = merge(common,{
   mode: 'production',
   target: 'node',
   entry: {
@@ -18,16 +18,10 @@ module.exports = {
     libraryTarget: "commonjs2",
   },
   plugins: [
-    new HtmlWebpackPlugin({
-       title: 'Production',
-       filename: 'index.html',
-       template: path.resolve(__dirname, '../src/index.html')
-    }),
-    new VueLoaderPlugin(),
+    new VueSSRServerPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('server')
     }),
-    new VueSSRServerPlugin(),
   ],
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -50,4 +44,4 @@ module.exports = {
         }
     ]
   }
-};
+});
