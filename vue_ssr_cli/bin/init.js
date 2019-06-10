@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const init = require('../commander/init')
 const program = require('commander');
+const init = require('../commander/init')
 const package = require('../package.json');
 const list = require('../commander/list');
 

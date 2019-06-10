@@ -5,6 +5,8 @@ const chalk = require('chalk');
 const oraSpanner = require('ora');
 const download = require('download-git-repo');
 const promisify = require('util').promisify;
+const stat = promisify(fs.stat);
+const access = promisify(fs.access);
 
 const { resolve } = path;
 const PATHS = process.cwd();
@@ -37,14 +39,12 @@ const gitDownload = (gitAddress, projectName, spanner) => {
 // 本地下载
 const localDownload = (address, projectName, spanner) => {
   const realSrc = resolve(__dirname, `../${address}`);
-  // try {
-  console.log(`${PATHS}/${projectName}`);
-  console.log('================');
-  const wrapper = (...arg) => {
-    copy(...arg);
+
+  co(copyTemplate(realSrc, `${PATHS}/${projectName}`, copy)).then(() => {
     startBuildProject(spanner)
-  }
-  copyTemplate(realSrc, `${PATHS}/${projectName}`, wrapper);
+  }).catch(e => {
+    buildFail(spanner, e)
+  })
 };
 
 // 构建报错
@@ -63,33 +63,42 @@ const startBuildProject = (spanner) => {
     process.exit(0);
 };
 
-const copy = function (src, dst) {
+// 拷贝
+const copy = function *(src, dst) {
     const paths = fs.readdirSync(src);
-    paths.forEach(function (path){
-        const _src = `${src}/${path}`;
-        const _dst = `${dst}/${path}`;
-        fs.stat(_src, (err, stats) => {
-          if(err) throw err;
-          if(stats.isFile()) {
-              const readable = fs.createReadStream(_src);
-              const writable = fs.createWriteStream(_dst);
-              readable.pipe(writable);
-          }else if(stats.isDirectory()) {
-              copyTemplate(_src, _dst, copy);
-          }
-        });
-    });
+    for(let ind in paths) {
+      const path = paths[ind];
+      const _src = `${src}/${path}`;
+      const _dst = `${dst}/${path}`;
+      try {
+        const stats = yield stat(_src);
+        if(stats.isFile()) {
+            const readable = fs.createReadStream(_src, { encoding: 'utf8' });
+            const writable = fs.createWriteStream(_dst, { encoding: 'utf8' });
+            yield new Promise((res) => {
+              try {
+                readable.pipe(writable).on('close', () => res());
+              } catch(e) {
+                res();
+              }
+            })
+        }else if(stats.isDirectory()) {
+            yield copyTemplate(_src, _dst, copy);
+        }
+      } catch(e) {
+        throw e
+      }
+    }
 }
 
-const copyTemplate = function (src, dst, callback) {
-    fs.access(dst, fs.constants.F_OK, (err) => {
-      if(err) {
-          fs.mkdirSync(dst);
-          callback(src, dst);
-      }else {
-          callback(src, dst);
-      }
-    });
+// 拷贝
+const copyTemplate = function *(src, dst, callback) {
+    try {
+      yield access(dst, fs.constants.F_OK);
+    } catch(e) {
+      fs.mkdirSync(dst)
+    }
+    yield callback(src, dst);
 }
 
 module.exports = {
