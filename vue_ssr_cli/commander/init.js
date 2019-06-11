@@ -28,13 +28,11 @@ const generator = function *(name) {
                 license = yield prompt(`    license:`);
 
                 if(!name) name = tempName;
-                // if(!projectName) projectName = tempName;
                 if(!version) projectName = `1.0.0`;
 
                 const params = {
                   name,
                   version,
-                  // projectName,
                   ...author && { author },
                   ...license && { license },
                   ...description && { description },

@@ -3,6 +3,7 @@ const co = require('co');
 const path = require('path');
 const chalk = require('chalk');
 const oraSpanner = require('ora');
+const handlebars = require('handlebars');
 const download = require('download-git-repo');
 const promisify = require('util').promisify;
 const stat = promisify(fs.stat);
@@ -18,34 +19,53 @@ const startSpanner = (words) => {const spanner = oraSpanner(words); spanner.star
 const downloadTemplates = (template, params) => {
         const address = template.path;
         const type = template.type;
-        const { name } = params;
+        const { name, ...interim } = params;
 
         let spanner = startSpanner("   正在构建，客官請稍等......");
-        if(type === 'git') return gitDownload(address, name, spanner);
-        if(type === 'local') return localDownload(address, name, spanner);
+        if(type === 'git') return gitDownload(address, name, spanner, interim);
+        if(type === 'local') return localDownload(address, name, spanner, interim);
 }
 
 // git仓库下载
-const gitDownload = (gitAddress, projectName, spanner) => {
+const gitDownload = (gitAddress, projectName, spanner, params) => {
   download(gitAddress, `${PATHS}/${projectName}`, function(err) {
     if(err) {
       return buildFail(spanner, err);
     }
+    // 重写package.json
+    reWrite(`${PATHS}/${projectName}/package.json`, params);
     // 构建成功
     startBuildProject(spanner)
   })
 };
 
 // 本地下载
-const localDownload = (address, projectName, spanner) => {
+const localDownload = (address, projectName, spanner, params) => {
   const realSrc = resolve(__dirname, `../${address}`);
-
   co(copyTemplate(realSrc, `${PATHS}/${projectName}`, copy)).then(() => {
-    startBuildProject(spanner)
+    // 重写package.json
+    reWrite(`${PATHS}/${projectName}/package.json`, params);
+
+    startBuildProject(spanner);
   }).catch(e => {
     buildFail(spanner, e)
   })
 };
+
+// 重写package.json
+const reWrite = (path, params) => {
+  console.log(path)
+  if(fs.existsSync(path)) {
+    const content = fs.readFileSync(path).toString();
+    let dt = JSON.parse(content);
+    for(let i in params) {
+      console.log(i)
+      dt[i] = `{{${i}}}`;
+    }
+    const result = handlebars.compile(JSON.stringify(dt, null, 2))(params);
+    fs.writeFileSync(path, result);
+  };
+}
 
 // 构建报错
 const buildFail = (spanner, err) => {
@@ -104,6 +124,11 @@ const copyTemplate = function *(src, dst, callback) {
 module.exports = {
   downloadTemplates,
 }
+
+
+
+
+
 
 
 
