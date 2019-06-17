@@ -1,8 +1,0 @@
-[models/init_script.js] `sqlite` sequelize sync and init success
-Starting cnpmjs.org ...
-cluster: false
-admins: {"myname":"myname@localhost.com","othername":"othername@localhost.com"}
-scopes: ["@my-company-name","@other-name"]
-sourceNpmRegistry: https://registry.npm.taobao.org
-syncModel: none
-[Thu May 30 2019 16:58:17 GMT+0800 (中国标准时间)] [worker:53323] Server started, registry server listen at 127.0.0.1:7001, web listen at 127.0.0.1:7002, cluster: false
