@@ -1,6 +1,6 @@
 {
   "name": "scholar-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   ],
   "author": "scholar",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "chalk": "^2.4.2",
     "co": "^4.6.0",
     "co-prompt": "^1.0.0",
