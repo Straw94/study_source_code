@@ -11,19 +11,19 @@ export default class Index extends Component {
   }
 
   componentWillMount() {
-
+    this.setState({
+      number: 111,
+    })
     console.log('parents componentWillMount');
   }
 
   componentDidMount() {
-    this.state.number = 111;
     console.log('parents componentDidMount');
-
   }
 
   numberAdd() {
     this.setState({
-      number: this.state.number + 1,
+      number: this.state.number
     })
   }
 
