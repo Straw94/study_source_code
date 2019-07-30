@@ -1,10 +1,9 @@
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import React from 'react';
+import { GalleryAnyProperty } from '../../../global';
 
 interface LoginComProps {
-  form: {
-    [Propnames: string]: any
-  },
+  form: GalleryAnyProperty,
 }
 
 class NormalLoginForm extends React.Component<LoginComProps, {}> {
@@ -21,6 +20,7 @@ class NormalLoginForm extends React.Component<LoginComProps, {}> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
+        <h3>Login In</h3>
         <Form.Item>
           {getFieldDecorator('username', {
             rules: [{ required: true, message: 'Please input your username!' }],
@@ -47,7 +47,7 @@ class NormalLoginForm extends React.Component<LoginComProps, {}> {
             valuePropName: 'checked',
             initialValue: true,
           })(<Checkbox>Remember me</Checkbox>)}
-          <a className="login-form-forgot" href="">
+          <a className="login-form-forgot" href="/#">
             Forgot password
           </a>
           <Button type="primary" htmlType="submit" className="login-form-button">
